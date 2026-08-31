@@ -84,7 +84,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -115,7 +115,7 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>MinSpace</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -150,7 +150,7 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -178,6 +178,7 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\UI\Aim\Aim.cpp" />
     <ClCompile Include="Engine\Fade.cpp" />
     <ClCompile Include="Game\Scene\GameClear.cpp" />
     <ClCompile Include="Game\Scene\GameTitle.cpp" />
@@ -186,8 +187,11 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
     <ClCompile Include="Engine\SceneEngine\SceneManager.cpp" />
     <ClCompile Include="Engine\SceneEngine\SceneTransition.cpp" />
     <ClCompile Include="Engine\MyMath.cpp" />
+    <ClCompile Include="Game\Player\Player.cpp" />
+    <ClCompile Include="Game\Player\PlayerBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\UI\Aim\Aim.h" />
     <ClInclude Include="Engine\SceneEngine\SceneBase.h" />
     <ClInclude Include="Engine\SceneEngine\SceneManager.h" />
     <ClInclude Include="Engine\SceneEngine\SceneTransition.h" />
@@ -197,6 +201,8 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
     <ClInclude Include="Game\Scene\GameClear.h" />
     <ClInclude Include="Game\Scene\GameTitle.h" />
     <ClInclude Include="Game\Scene\GameScene.h" />
+    <ClInclude Include="Game\Player\Player.h" />
+    <ClInclude Include="Game\Player\PlayerBullet.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,7 @@
 #pragma once
+#include "Aim/Aim.h"
 #include "KamataEngine.h"
+#include "Player.h"
 #include "SceneBase.h"
 
 using namespace KamataEngine;
@@ -21,12 +23,18 @@ public:
 	void Draw() override;
 
 private:
-	// 3Dモデル
-	KamataEngine::Model* model_ = nullptr;
 
 	// カメラ
 	KamataEngine::Camera camera_;
 
 	// ワールドトランスフォーム
 	KamataEngine::WorldTransform worldTransform_;
+
+	// プレイヤー
+	Player* player_ = nullptr;
+	KamataEngine::Model* playerModel_ = nullptr;
+	KamataEngine::Model* playerBulletModel_ = nullptr;
+
+	// 照準
+	Aim* aim_ = nullptr;
 };

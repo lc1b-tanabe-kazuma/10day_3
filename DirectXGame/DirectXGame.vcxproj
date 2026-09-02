@@ -84,7 +84,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;$(ProjectDir)Game/Enemy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;$(ProjectDir)Game/Enemy;$(ProjectDir)Game/UI/DrawNumber;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
@@ -115,7 +115,7 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;$(ProjectDir)Game/Enemy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;$(ProjectDir)Game/Enemy;$(ProjectDir)Game/UI/DrawNumber;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>MinSpace</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -150,7 +150,7 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_WINDOWS;USE_IMGUI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;$(ProjectDir)Game/Enemy;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Engine;$(ProjectDir)Engine/SceneEngine;$(ProjectDir)Game;$(ProjectDir)Game/Scene;$(ProjectDir)Game/Player;$(ProjectDir)Game/UI;$(ProjectDir)Game/Enemy;$(ProjectDir)Game/UI/DrawNumber;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <Optimization>Disabled</Optimization>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
@@ -178,6 +178,7 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Game\UI\DrawNumber\DrawNumber.cpp" />
     <ClCompile Include="Game\Enemy\EnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Game\Enemy\Enemy.cpp" />
@@ -194,6 +195,7 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
     <ClCompile Include="Game\Player\PlayerBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game\UI\DrawNumber\DrawNumber.h" />
     <ClInclude Include="Game\Enemy\EnemySpawner.h" />
     <ClInclude Include="Game\Enemy\EnemyBullet.h" />
     <ClInclude Include="Game\Enemy\Enemy.h" />

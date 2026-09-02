@@ -21,6 +21,7 @@ GameScene::~GameScene() {
 		delete enemy;
 	}
 	delete enemySpawner_;
+	delete drawNumber_;
 }
 
 void GameScene::Initialize() {
@@ -49,6 +50,10 @@ void GameScene::Initialize() {
 	enemySpawner_ = new EnemySpawner();
 	enemySpawner_->Initialize(modelEnemy_, modelBullet_, &camera_, player_, enemies_);
 	enemySpawner_->LoadPopData("Resources/enemy/EnemyPopData.csv");
+
+	// 数字描画の初期化
+	drawNumber_ = new DrawNumber();
+	drawNumber_->Initialize(TextureManager::Load("UI/number.png"), Vector2(1000.0f, 32.0f));
 }
 
 void GameScene::Update() {
@@ -88,6 +93,9 @@ void GameScene::Update() {
 	// 当たり判定
 	OnCollision();
 
+	// 数字描画の更新
+	drawNumber_->Update(static_cast<int>(player_->GetCombo()));
+
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		SceneManager::GetInstance()->ChangeScene("GameClear");
 	}
@@ -113,6 +121,9 @@ void GameScene::OnCollision() {
 				// ---- 通常弾 ----
 				bullet->OnCollision();
 				enemy->OnCollision();
+
+				// ---- コンボ ----
+				player_->OnEnemyHit();
 			}
 		}
 	}
@@ -158,7 +169,11 @@ void GameScene::Draw() {
 	// UI描画前処理
 	Sprite::PreDraw(commandList);
 
+	// 照準描画
 	aim_->Draw();
+
+	// コンボ描画
+	drawNumber_->Draw();
 
 	// UI描画後処理
 	Sprite::PostDraw();

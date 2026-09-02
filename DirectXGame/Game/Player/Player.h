@@ -26,6 +26,12 @@ public:
 
 	void Attack();
 
+	// 敵に攻撃がヒットした
+	void OnEnemyHit();
+
+	// コンボ取得
+	int GetCombo() const { return combo_; }
+
 	~Player();
 
 private:
@@ -62,4 +68,13 @@ private:
 
 	// 被弾フラグ
 	bool isHit_ = false;
+
+	// コンボ
+	int combo_ = 0;
+
+	// コンボ継続時間
+	float comboTimer_ = 0.0f;
+
+	// コンボが続く時間
+	static constexpr float kComboTime = 2.0f;
 };

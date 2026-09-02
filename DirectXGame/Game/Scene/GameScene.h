@@ -1,10 +1,11 @@
 #pragma once
 #include "Aim/Aim.h"
+#include "DrawNumber.h"
+#include "Enemy.h"
+#include "EnemySpawner.h"
 #include "KamataEngine.h"
 #include "Player.h"
 #include "SceneBase.h"
-#include "Enemy.h"
-#include "EnemySpawner.h"
 
 using namespace KamataEngine;
 
@@ -28,7 +29,6 @@ public:
 	void Draw() override;
 
 private:
-
 	// カメラ
 	KamataEngine::Camera camera_;
 
@@ -48,4 +48,8 @@ private:
 	KamataEngine::Model* modelEnemy_ = nullptr;
 	KamataEngine::Model* modelBullet_ = nullptr;
 	EnemySpawner* enemySpawner_ = nullptr;
+
+	// 数字描画
+	DrawNumber* drawNumber_;
+	uint32_t numberTH_ = 0;
 };

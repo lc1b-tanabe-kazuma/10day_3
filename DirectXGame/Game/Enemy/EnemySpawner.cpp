@@ -69,6 +69,12 @@ void EnemySpawner::Update() {
 			break;
 		}
 	}
+
+	// CSVを最後まで読んだら先頭に戻す
+	if (popCommands_.eof()) {
+		popCommands_.clear();
+		popCommands_.seekg(0);
+	}
 }
 
 void EnemySpawner::ExecutePop(stringstream& lineStream) {

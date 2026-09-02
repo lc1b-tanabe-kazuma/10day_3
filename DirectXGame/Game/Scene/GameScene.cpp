@@ -100,9 +100,6 @@ void GameScene::Update() {
 		boss_->Update();
 	}
 
-	// 敵のスクリプト実行
-	UpdateEnemyPopcomand();
-
 	// 敵スポナーの更新
 	enemySpawner_->Update();
 

@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "SceneBase.h"
 #include "Enemy.h"
+#include "EnemySpawner.h"
 
 using namespace KamataEngine;
 
@@ -20,18 +21,7 @@ public:
 	// 更新
 	void Update() override;
 
-	// 敵のスクリプトファイル読み込み
-	void LoadEnemyPopData();
-
-	// 敵のスクリプト実行
-	void UpdateEnemyPopcomand();
-
-	// 敵の出現待機中
-	bool IsWaiting() const { return isWaiting_; }
-
-	// 敵が全員WAITコマンドの時間が0になっていてかつ全員デリートされたか
-	bool IsAllEnemiesWaited() const { return enemies_.empty() && !isWaiting_ && enemyPopComands.eof(); }
-
+	// 当たり判定
 	void OnCollision();
 
 	// 描画
@@ -57,13 +47,5 @@ private:
 	std::list<Enemy*> enemies_;
 	KamataEngine::Model* modelEnemy_ = nullptr;
 	KamataEngine::Model* modelBullet_ = nullptr;
-
-	// 敵の発生コマンド
-	std::stringstream enemyPopComands;
-
-	// 敵の出現の待機中フラグ
-	bool isWaiting_ = false;
-
-	// 敵の出現の待機タイマー
-	int32_t waitTimer_ = 0;
+	EnemySpawner* enemySpawner_ = nullptr;
 };

@@ -4,6 +4,7 @@
 
 // 前方宣言
 class Aim;
+class Boss;
 
 class Player {
 public:
@@ -19,6 +20,9 @@ public:
 	// 弾リストを取得
 	const std::list<PlayerBullet*>& GetBullets() const { return bullets_; }
 
+	// ワールドトランスフォームのゲッターをconst参照をreturnする関数として作る
+	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
+
 	// 半径を取得
 	float GetRadius() const { return kRadius; }
 
@@ -26,11 +30,14 @@ public:
 
 	void Attack();
 
+	void SetBoss(Boss* boss) { boss_ = boss; }
+
 	// 敵に攻撃がヒットした
 	void OnEnemyHit();
 
 	// コンボ取得
 	int GetCombo() const { return combo_; }
+
 
 	~Player();
 
@@ -60,14 +67,25 @@ private:
 
 	const float kAimZ = 22.5f;
 
-	const float kMoveLimitX = 30.0f;
-	const float kMoveLimitY = 10.0f;
-
 	// 無敵時間
 	float kInvincibleTime = 2.0f;
 
 	// 被弾フラグ
 	bool isHit_ = false;
+
+	float angleZ = 7.85f;  // Z軸回転角（ラジアン）
+	float radius = 64.0f; // 原点からの距離
+	const float kRotateSpeed = 0.01f;
+	float verticalSpeed_ = 0.2f;
+	float minY_ = -5.0f;
+	float maxY_ = 5.0f;
+
+	const float maxAngle = 8.7f;
+	const float minAngle = 7.0f;
+
+	Boss* boss_ = nullptr;
+
+	KamataEngine::Vector3 forward_ = {0, 0, 1}; // 見た目と独立した進行方向
 
 	// コンボ
 	int combo_ = 0;
@@ -77,4 +95,5 @@ private:
 
 	// コンボが続く時間
 	static constexpr float kComboTime = 2.0f;
+
 };

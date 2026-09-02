@@ -6,6 +6,10 @@
 #include "KamataEngine.h"
 #include "Player.h"
 #include "SceneBase.h"
+#include "Enemy.h"
+#include "Boss/Boss.h"
+#include "RailCamera/RailCameraController.h"
+
 
 using namespace KamataEngine;
 
@@ -48,6 +52,23 @@ private:
 	KamataEngine::Model* modelEnemy_ = nullptr;
 	KamataEngine::Model* modelBullet_ = nullptr;
 	EnemySpawner* enemySpawner_ = nullptr;
+
+
+	// ボス
+	Boss* boss_ = nullptr;
+	KamataEngine::Model* bossModel_ = nullptr;
+
+	// レールカメラコントローラー
+	RailCameraController* railCameraController_ = nullptr;
+
+	// 敵の発生コマンド
+	std::stringstream enemyPopComands;
+
+	// 敵の出現の待機中フラグ
+	bool isWaiting_ = false;
+
+	// 敵の出現の待機タイマー
+	int32_t waitTimer_ = 0;
 
 	// 数字描画
 	DrawNumber* drawNumber_;

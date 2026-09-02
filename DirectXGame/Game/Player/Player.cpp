@@ -2,6 +2,9 @@
 #include "Player.h"
 #include "MyMath.h"
 #include "Aim/Aim.h"
+#include <algorithm>
+#include "Boss/Boss.h"
+
 
 using namespace KamataEngine;
 
@@ -12,7 +15,7 @@ void Player::Initialize(Model* model, Camera* camera, Model* bulletModel, Aim* a
 
 	// ワールドトランスフォームの初期化
 	worldTransform_.Initialize();
-	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+	worldTransform_.translation_ = {0.0f, 0.0f, 64.0f};
 	worldTransform_.scale_ = {1.3f, 1.3f, 1.3f};
 	worldTransform_.rotation_.y = 3.14f / 2.0f;
 
@@ -67,6 +70,20 @@ void Player::Update() {
 		isHit_ = false;
 		kInvincibleTime = 2.0f;
 	}
+
+	// ワールド座標を取得
+	Vector3 worldPos = GetWorldPosition();
+
+#ifdef _DEBUG
+	// キャラクターの座標を画面表示する
+	ImGui::Begin("Player");
+	ImGui::DragFloat3("Position", &worldTransform_.translation_.x, 0.01f);
+	ImGui::DragFloat3("Rotation", &worldTransform_.rotation_.x, 0.01f);
+	ImGui::DragFloat3("WorldPosition", &worldPos.x, 0.01f);
+	ImGui::DragFloat3("angle", &angleZ, 0.01f);
+	ImGui::End();
+
+#endif // _DEBUG
 }
 
 void Player::Draw() {
@@ -91,27 +108,69 @@ void Player::Draw() {
 
 // 移動処理
 void Player::Move() {
-	if (input_->PushKey(DIK_W)) {
-		worldTransform_.translation_.y += moveSpeed_;
-	}
-
-	if (input_->PushKey(DIK_S)) {
-		worldTransform_.translation_.y -= moveSpeed_;
-	}
-
-	if (input_->PushKey(DIK_A)) {
-		worldTransform_.translation_.x -= moveSpeed_;
-	}
-
-	if (input_->PushKey(DIK_D)) {
-		worldTransform_.translation_.x += moveSpeed_;
-	}
-
+	//if (input_->PushKey(DIK_W)) {
+	//	worldTransform_.translation_.y += moveSpeed_;
+	//}
+	//
+	//if (input_->PushKey(DIK_S)) {
+	//	worldTransform_.translation_.y -= moveSpeed_;
+	//}
+	//
+	//if (input_->PushKey(DIK_A)) {
+	//	worldTransform_.translation_.x -= moveSpeed_;
+	//}
+	//
+	//if (input_->PushKey(DIK_D)) {
+	//	worldTransform_.translation_.x += moveSpeed_;
+	//}
+	//
 	// 制限を設ける
-	worldTransform_.translation_.x = std::max(worldTransform_.translation_.x, -kMoveLimitX);
-	worldTransform_.translation_.x = std::min(worldTransform_.translation_.x, +kMoveLimitX);
-	worldTransform_.translation_.y = std::max(worldTransform_.translation_.y, -kMoveLimitY);
-	worldTransform_.translation_.y = std::min(worldTransform_.translation_.y, kMoveLimitY);
+	//worldTransform_.translation_.x = std::max(worldTransform_.translation_.x, -kMoveLimitX);
+	//worldTransform_.translation_.x = std::min(worldTransform_.translation_.x, +kMoveLimitX);
+	//worldTransform_.translation_.y = std::max(worldTransform_.translation_.y, -kMoveLimitY);
+	//worldTransform_.translation_.y = std::min(worldTransform_.translation_.y, kMoveLimitY);
+	//worldTransform_.translation_.z = std::max(worldTransform_.translation_.z, -kMoveLimitZ);
+	//worldTransform_.translation_.z = std::min(worldTransform_.translation_.z, +kMoveLimitZ);
+
+		// ===== 上下移動 =====
+	if (input_->PushKey(DIK_W)) {
+		worldTransform_.translation_.y += verticalSpeed_;
+	}
+	if (input_->PushKey(DIK_S)) {
+		worldTransform_.translation_.y -= verticalSpeed_;
+	}
+
+	// Y制限
+	worldTransform_.translation_.y = std::clamp(worldTransform_.translation_.y, minY_, maxY_);
+
+	// ===== 回転入力 =====
+	if (input_->PushKey(DIK_A)) {
+		angleZ -= kRotateSpeed;
+	} else if (input_->PushKey(DIK_D)) {
+		angleZ += kRotateSpeed;
+	}
+	// A/Dの回転範囲を制限
+	angleZ = std::clamp(angleZ, minAngle, maxAngle);
+
+	// ===== XZ 円運動 =====
+	worldTransform_.translation_.x = std::cos(angleZ) * radius;
+
+	worldTransform_.translation_.z = std::sin(angleZ) * radius;
+	// ===== 向き更新 =====
+	Vector3 bossPos = boss_->GetWorldPosition();
+	Vector3 playerPos = worldTransform_.translation_;
+
+	Vector3 toBoss = bossPos - playerPos;
+
+	if (Length(toBoss) > 0.0001f) {
+		toBoss = Normalize(toBoss);
+
+		forward_ = toBoss;
+
+		// Y軸だけ回転（地面に沿って向く）
+		worldTransform_.rotation_.y = std::atan2(toBoss.x, toBoss.z) + 3.14159265f / 2.0f;
+	}
+
 
 	// ワールド変換行列の更新
 	WorldTransformUpdate(worldTransform_);

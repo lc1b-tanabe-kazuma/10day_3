@@ -17,6 +17,8 @@ GameScene::~GameScene() {
 	delete aim_;
 	delete modelEnemy_;
 	delete modelBullet_;
+	delete bossModel_;
+	delete railCameraController_;
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
@@ -43,6 +45,20 @@ void GameScene::Initialize() {
 	// 敵モデル
 	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
 	modelBullet_ = Model::CreateFromOBJ("playerBullet", true);
+
+	// ボスの初期化
+	boss_ = new Boss();
+	bossModel_ = Model::CreateFromOBJ("boss", true);
+	boss_->Initialize(bossModel_, &camera_);
+
+	player_->SetBoss(boss_);
+
+	boss_->SetPlayer(player_);
+
+	// レールカメラコントローラーの初期化
+	railCameraController_ = new RailCameraController();
+	railCameraController_->Initialize(&camera_, player_, boss_);
+	railCameraController_->SetParent(&player_->GetWorldTransform());
 }
 
 void GameScene::Update() {
@@ -75,6 +91,11 @@ void GameScene::Update() {
 	// プレイヤーの更新
 	player_->Update();
 
+	// ボスの更新
+	if (boss_) {
+		boss_->Update();
+	}
+
 	// 敵のスクリプト実行
 	UpdateEnemyPopcomand();
 
@@ -94,6 +115,15 @@ void GameScene::Update() {
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		SceneManager::GetInstance()->ChangeScene("GameClear");
 	}
+
+	// カメラ処理
+	// レールカメラコントローラーの更新
+	railCameraController_->Update();
+	// レールカメラコントローラーのカメラを取得して適用
+	camera_.matView = railCameraController_->GetCamera().matView;
+	camera_.matProjection = railCameraController_->GetCamera().matProjection;
+	// ビュープロジェクション行列の更新と転送
+	camera_.TransferMatrix();
 }
 
 // 敵のスクリプトファイル読み込み
@@ -258,6 +288,11 @@ void GameScene::Draw() {
 
 	// プレイヤーの描画
 	player_->Draw();
+
+	// ボスの描画
+	if (boss_) {
+		boss_->Draw();
+	}
 
 	// 敵の描画
 	for (Enemy* enemy : enemies_) {

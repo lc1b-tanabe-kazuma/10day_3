@@ -22,6 +22,8 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
+	delete enemySpawner_;
+	delete drawNumber_;
 }
 
 void GameScene::Initialize() {
@@ -46,6 +48,7 @@ void GameScene::Initialize() {
 	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
 	modelBullet_ = Model::CreateFromOBJ("playerBullet", true);
 
+
 	// ボスの初期化
 	boss_ = new Boss();
 	bossModel_ = Model::CreateFromOBJ("boss", true);
@@ -59,6 +62,16 @@ void GameScene::Initialize() {
 	railCameraController_ = new RailCameraController();
 	railCameraController_->Initialize(&camera_, player_, boss_);
 	railCameraController_->SetParent(&player_->GetWorldTransform());
+
+	// 敵スポナーの初期化
+	enemySpawner_ = new EnemySpawner();
+	enemySpawner_->Initialize(modelEnemy_, modelBullet_, &camera_, player_, enemies_);
+	enemySpawner_->LoadPopData("Resources/enemy/EnemyPopData.csv");
+
+	// 数字描画の初期化
+	drawNumber_ = new DrawNumber();
+	drawNumber_->Initialize(TextureManager::Load("UI/number.png"), Vector2(1000.0f, 32.0f));
+
 }
 
 void GameScene::Update() {
@@ -76,15 +89,6 @@ void GameScene::Update() {
 		return false;
 	});
 
-	// 敵が全て消えたら最初から出現し直す
-	if (enemies_.empty()) {
-		// 既存のコマンドストリームをクリアしてファイルから再読み込みする
-		LoadEnemyPopData(); // Resources/enemyPopData.csv を再読み込み
-
-		// 待機状態を解除して即実行できるようにする
-		waitTimer_ = 0;
-	}
-
 	// 照準の更新
 	aim_->Update();
 
@@ -99,6 +103,9 @@ void GameScene::Update() {
 	// 敵のスクリプト実行
 	UpdateEnemyPopcomand();
 
+	// 敵スポナーの更新
+	enemySpawner_->Update();
+
 	// 敵キャラの更新
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
@@ -112,6 +119,9 @@ void GameScene::Update() {
 	// 当たり判定
 	OnCollision();
 
+	// 数字描画の更新
+	drawNumber_->Update(static_cast<int>(player_->GetCombo()));
+
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		SceneManager::GetInstance()->ChangeScene("GameClear");
 	}
@@ -124,115 +134,6 @@ void GameScene::Update() {
 	camera_.matProjection = railCameraController_->GetCamera().matProjection;
 	// ビュープロジェクション行列の更新と転送
 	camera_.TransferMatrix();
-}
-
-// 敵のスクリプトファイル読み込み
-void GameScene::LoadEnemyPopData() {
-
-	// ファイルを開く
-	ifstream file;
-	file.open("Resources/enemy/enemyPopData.csv");
-
-#ifdef DEBUG
-	assert(file.is_open());
-#endif // DEBUG
-
-	// ファイルの内容を文字列ストリームにコピー
-	enemyPopComands << file.rdbuf();
-
-	// ファイルを閉じる
-	file.close();
-}
-
-// 敵のスクリプト実行
-void GameScene::UpdateEnemyPopcomand() {
-
-	// 待機処理
-	if (isWaiting_) {
-		// 待機タイマーをデクリメント
-		waitTimer_--;
-		// タイマーが0になったら待機終了
-		if (waitTimer_ <= 0) {
-			isWaiting_ = false;
-		}
-		// 待機中は他の処理をしない
-		return;
-	}
-
-	// 1行分の文字列を入れる変数
-	string line;
-
-	// コマンド実行ループ
-	while (getline(enemyPopComands, line)) {
-		// 1行分の文字列を文字列ストリームに変換
-		stringstream line_stream(line);
-
-		string word;
-		// カンマ区切りで行の先頭文字列を取得
-		getline(line_stream, word, ',');
-
-		// "//"から始める行はコメント
-		if (word.find("//") == 0) {
-			// コメント行を飛ばす
-			continue;
-		}
-
-		// POPコマンド
-		if (word.find("POP") == 0) {
-			// 敵の生成
-			// x座標
-			getline(line_stream, word, ',');
-			float x = (float)atof(word.c_str());
-
-			// y座標
-			getline(line_stream, word, ',');
-			float y = (float)atof(word.c_str());
-
-			// z座標
-			getline(line_stream, word, ',');
-			float z = (float)atof(word.c_str());
-
-			// 移動ベクトルの取得
-			// 移動ベクトルX
-			getline(line_stream, word, ',');
-			float vx = (float)atof(word.c_str());
-
-			// 移動ベクトルY
-			getline(line_stream, word, ',');
-			float vy = (float)atof(word.c_str());
-
-			// 移動ベクトルZ
-			getline(line_stream, word, ',');
-			float vz = (float)atof(word.c_str());
-
-			// 敵を発生させる
-			Enemy* newEnemies = new Enemy();
-			newEnemies->Initialize(modelEnemy_, &camera_, modelBullet_, player_);
-			newEnemies->SetPosition(Vector3(x, y, z));
-			newEnemies->SetMoveVector(Vector3(vx, vy, vz));
-
-			enemies_.push_back(newEnemies);
-
-			// デバッグ出力
-			// OutputDebugStringA(("Enemy Spawned at: " + to_string(x) + "," + to_string(y) + "," + to_string(z) + "\n").c_str());
-		}
-
-		// WAITコマンド
-		else if (word.find("WAIT") == 0) {
-			getline(line_stream, word, ',');
-			// 待ち時間
-			int32_t waitFrame = atoi(word.c_str());
-
-			// 待機開始
-			isWaiting_ = true;
-
-			// 待機タイマーをセット
-			waitTimer_ = waitFrame;
-
-			// ループを抜ける
-			break;
-		}
-	}
 }
 
 void GameScene::OnCollision() {
@@ -255,6 +156,9 @@ void GameScene::OnCollision() {
 				// ---- 通常弾 ----
 				bullet->OnCollision();
 				enemy->OnCollision();
+
+				// ---- コンボ ----
+				player_->OnEnemyHit();
 			}
 		}
 	}
@@ -305,7 +209,11 @@ void GameScene::Draw() {
 	// UI描画前処理
 	Sprite::PreDraw(commandList);
 
+	// 照準描画
 	aim_->Draw();
+
+	// コンボ描画
+	drawNumber_->Draw();
 
 	// UI描画後処理
 	Sprite::PostDraw();

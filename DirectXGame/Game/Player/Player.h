@@ -32,6 +32,13 @@ public:
 
 	void SetBoss(Boss* boss) { boss_ = boss; }
 
+	// 敵に攻撃がヒットした
+	void OnEnemyHit();
+
+	// コンボ取得
+	int GetCombo() const { return combo_; }
+
+
 	~Player();
 
 private:
@@ -76,8 +83,17 @@ private:
 	const float maxAngle = 8.7f;
 	const float minAngle = 7.0f;
 
-
 	Boss* boss_ = nullptr;
 
 	KamataEngine::Vector3 forward_ = {0, 0, 1}; // 見た目と独立した進行方向
+
+	// コンボ
+	int combo_ = 0;
+
+	// コンボ継続時間
+	float comboTimer_ = 0.0f;
+
+	// コンボが続く時間
+	static constexpr float kComboTime = 2.0f;
+
 };

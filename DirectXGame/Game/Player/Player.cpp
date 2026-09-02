@@ -1,9 +1,12 @@
 #define NOMINMAX
 #include "Player.h"
-#include "MyMath.h"
 #include "Aim/Aim.h"
+
 #include <algorithm>
 #include "Boss/Boss.h"
+
+
+#include "MyMath.h"
 
 
 using namespace KamataEngine;
@@ -44,6 +47,8 @@ Player::~Player() {
 }
 
 void Player::Update() {
+
+	// 移動処理
 	Move();
 
 	// 弾の更新
@@ -59,6 +64,21 @@ void Player::Update() {
 		}
 		return false;
 	});
+
+	// コンボタイマー
+	if (combo_ > 0) {
+
+		// コンボ継続時間を数える
+		comboTimer_ -= 1.0f / 30.0f;
+
+		// コンボ継続時間を過ぎたら
+		if (comboTimer_ <= 0.0f) {
+
+			// コンボが途切れたらコンボ数をリセット
+			combo_ = 0;
+			comboTimer_ = 0.0f;
+		}
+	}
 
 	// 無敵時間の処理
 	if (isHit_) {
@@ -84,6 +104,15 @@ void Player::Update() {
 	ImGui::End();
 
 #endif // _DEBUG
+}
+
+void Player::OnEnemyHit() {
+
+	// コンボを増やす
+	combo_++;
+
+	// コンボ時間をリセット
+	comboTimer_ = kComboTime;
 }
 
 void Player::Draw() {

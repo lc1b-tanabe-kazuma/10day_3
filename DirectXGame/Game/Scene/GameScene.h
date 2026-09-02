@@ -1,15 +1,13 @@
 #pragma once
 #include "Aim/Aim.h"
+#include "Boss/Boss.h"
 #include "DrawNumber.h"
 #include "Enemy.h"
 #include "EnemySpawner.h"
 #include "KamataEngine.h"
 #include "Player.h"
-#include "SceneBase.h"
-#include "Enemy.h"
-#include "Boss/Boss.h"
 #include "RailCamera/RailCameraController.h"
-
+#include "SceneBase.h"
 
 using namespace KamataEngine;
 
@@ -52,7 +50,6 @@ private:
 	KamataEngine::Model* modelEnemy_ = nullptr;
 	KamataEngine::Model* modelBullet_ = nullptr;
 	EnemySpawner* enemySpawner_ = nullptr;
-
 
 	// ボス
 	Boss* boss_ = nullptr;

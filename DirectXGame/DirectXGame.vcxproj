@@ -178,7 +178,6 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Game\Enemy\EnemySpawner.cpp" />
     <ClCompile Include="Game\Enemy\EnemyBullet.cpp" />
     <ClCompile Include="Game\Enemy\Enemy.cpp" />
     <ClCompile Include="Game\UI\Aim\Aim.cpp" />
@@ -194,7 +193,6 @@ xcopy "$(ProjectDir)..\External\KamataEngine\shaders" "$(ProjectDir)Resources\En
     <ClCompile Include="Game\Player\PlayerBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game\Enemy\EnemySpawner.h" />
     <ClInclude Include="Game\Enemy\EnemyBullet.h" />
     <ClInclude Include="Game\Enemy\Enemy.h" />
     <ClInclude Include="Game\UI\Aim\Aim.h" />

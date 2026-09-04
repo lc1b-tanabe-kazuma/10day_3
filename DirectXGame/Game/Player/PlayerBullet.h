@@ -3,7 +3,7 @@
 
 class PlayerBullet {
 public:
-	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, KamataEngine::Vector3& velocity);
+	void Initialize(KamataEngine::Model* model, const KamataEngine::Vector3& position, KamataEngine::Vector3& velocity,float scale,int damage);
 
 	void Update();
 
@@ -21,6 +21,8 @@ public:
 
 	// スケール設定
 	void setScale(const KamataEngine::Vector3& scale) { worldTranseform_.scale_ = scale; }
+
+	int GetDamage() const { return damage_; }
 
 private:
 	// ワールド変換データ
@@ -46,4 +48,7 @@ private:
 
 	// 弾の速度
 	const float kBulletSpeed = 0.5f;
+
+	// 
+	int damage_ = 1;
 };

@@ -47,6 +47,40 @@ void Player::Update() {
 	// 移動処理
 	Move();
 
+	switch (chargeState_) {
+
+	case ChargeState::None:
+
+		if (aim_->IsAttackHold()) {
+			chargeState_ = ChargeState::Charging;
+			chargeTime_ = 0.0f;
+		}
+
+		break;
+
+	case ChargeState::Charging:
+
+		if (aim_->IsAttackHold()) {
+
+			// チャージ
+			chargeTime_ += 1.0f / 30.0f;
+
+			if (chargeTime_ > kMaxChargeTime) {
+				chargeTime_ = kMaxChargeTime;
+			}
+
+		} else {
+
+			// ボタンを離した瞬間に発射
+			Attack();
+
+			chargeTime_ = 0.0f;
+			chargeState_ = ChargeState::None;
+		}
+
+		break;
+	}
+
 	// 弾の更新
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Update();
@@ -98,7 +132,6 @@ void Player::Update() {
 	ImGui::DragFloat3("WorldPosition", &worldPos.x, 0.01f);
 	ImGui::DragFloat3("angle", &angleZ, 0.01f);
 	ImGui::End();
-
 #endif // _DEBUG
 }
 
@@ -193,7 +226,7 @@ void Player::Attack() {
 	// プレイヤー → ボス方向
 	Vector3 normal = Normalize(bossPos - playerPos);
 
-	// 照準との交点
+	// プレイヤーとボスの距離
 	float kAimDistance = Length(bossPos - playerPos);
 
 	// プレイヤーの前に照準平面を作る
@@ -220,9 +253,25 @@ void Player::Attack() {
 	// プレイヤー → 照準位置
 	Vector3 bulletDir = Normalize(targetPos - playerPos);
 
+	// チャージ率
+	float chargeRate = chargeTime_ / kMaxChargeTime;
+
+	// 弾のサイズ
+	const float kMinBulletScale = 1.0f;
+	const float kMaxBulletScale = 3.0f;
+
+	float bulletScale = kMinBulletScale + (kMaxBulletScale - kMinBulletScale) * chargeRate;
+
+	// 弾速
 	Vector3 bulletVelocity = bulletDir * kBulletSpeed;
 
-	newBullet->Initialize(bulletModel_, playerPos, bulletVelocity);
+	const int kMinDamage = 3;
+	const int kMaxDamage = 20;
+
+	int damage = static_cast<int>(kMinDamage + (kMaxDamage - kMinDamage) * GetChargeRate());
+
+	// 弾生成
+	newBullet->Initialize(bulletModel_, playerPos, bulletVelocity, bulletScale, damage);
 
 	bullets_.push_back(newBullet);
 }

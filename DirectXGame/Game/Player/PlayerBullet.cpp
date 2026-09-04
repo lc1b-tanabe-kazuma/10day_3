@@ -4,7 +4,7 @@
 
 using namespace KamataEngine;
 
-void PlayerBullet::Initialize(Model* model, const Vector3& position, Vector3& velocity) {
+void PlayerBullet::Initialize(Model* model, const Vector3& position, Vector3& velocity, float scale, int damage) {
 
 	// NULLポインタのチェック
 	assert(model);
@@ -12,12 +12,19 @@ void PlayerBullet::Initialize(Model* model, const Vector3& position, Vector3& ve
 	// 引数として受け取ったデータをメンバ変数に記録する
 	model_ = model;
 
+	deathTimer_ = kBulletLife;
+	isDead_ = false;
+	damage_ = damage;
+
 	// ワールド変換の初期化
 	worldTranseform_.Initialize();
 
 	worldTranseform_.translation_ = position;
 
 	velocity_ = velocity;
+
+	// 弾の大きさ
+	worldTranseform_.scale_ = {scale, scale, scale};
 
 	// 向き
 	worldTranseform_.rotation_.y = 3.14f / 2.0f;

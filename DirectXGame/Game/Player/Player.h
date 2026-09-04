@@ -65,8 +65,6 @@ private:
 	//
 	Aim* aim_ = nullptr;
 
-	const float kAimZ = 22.5f;
-
 	// 無敵時間
 	float kInvincibleTime = 2.0f;
 
@@ -95,5 +93,4 @@ private:
 
 	// コンボが続く時間
 	static constexpr float kComboTime = 2.0f;
-
 };

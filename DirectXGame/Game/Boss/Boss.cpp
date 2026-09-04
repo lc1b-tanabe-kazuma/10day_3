@@ -24,7 +24,7 @@ void Boss::Initialize(Model* model, KamataEngine::Camera* camera) {
 	// ワールド変換の初期化
 	worldTranseform_.Initialize();
 	worldTranseform_.translation_ = {0.0f, 0.0f, 0.0f};
-	worldTranseform_.scale_ = {5.0f, 5.0f, 5.0f};
+	worldTranseform_.scale_ = {2.5f, 2.5f, 2.5f};
 
 	// テクスチャーハンドル
 	// textureHandle_ = textureHandle;

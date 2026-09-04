@@ -59,7 +59,7 @@ void Aim::Update() {
 	if (coolTime_ <= 0.0f) {
 
 		// 左クリックで打つ
-		if (input_->IsTriggerMouse(0)) {
+		if (input_->IsPressMouse(0)) {
 			isAttac_ = true;
 			coolTime_ = 0.3f;
 		}

@@ -48,7 +48,6 @@ void GameScene::Initialize() {
 	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
 	modelBullet_ = Model::CreateFromOBJ("playerBullet", true);
 
-
 	// ボスの初期化
 	boss_ = new Boss();
 	bossModel_ = Model::CreateFromOBJ("boss", true);
@@ -71,7 +70,6 @@ void GameScene::Initialize() {
 	// 数字描画の初期化
 	drawNumber_ = new DrawNumber();
 	drawNumber_->Initialize(TextureManager::Load("UI/number.png"), Vector2(1000.0f, 32.0f));
-
 }
 
 void GameScene::Update() {
@@ -106,11 +104,6 @@ void GameScene::Update() {
 	// 敵キャラの更新
 	for (Enemy* enemy : enemies_) {
 		enemy->Update();
-	}
-
-	// 攻撃する時
-	if (aim_->IsAttac()) {
-		player_->Attack();
 	}
 
 	// 当たり判定
@@ -160,6 +153,19 @@ void GameScene::OnCollision() {
 		}
 	}
 
+	// ボスの座標を取得
+	posA = boss_->GetWorldPosition();
+
+	// プレイヤーの弾の座標を取得
+	for (PlayerBullet* bullet : playerBullets) {
+		posB = bullet->GetPosition();
+		if (IsCollision(posA, boss_->GetRadius(), posB, bullet->GetRadius())) {
+			// ---- 通常弾 ----
+			bullet->OnCollision();
+			boss_->Oncollosion(bullet->GetDamage());
+		}
+	}
+
 	// 敵の弾とプレイヤーの当たり判定
 	for (Enemy* enemy : enemies_) {
 		posA = player_->GetWorldPosition();
@@ -175,6 +181,7 @@ void GameScene::OnCollision() {
 			}
 		}
 	}
+
 #pragma endregion
 }
 

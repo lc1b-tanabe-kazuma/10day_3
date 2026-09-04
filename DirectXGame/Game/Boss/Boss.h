@@ -22,7 +22,7 @@ public:
 	KamataEngine::Vector3 GetPosition();
 
 	// 衝突時処理
-	void Oncollosion();
+	void Oncollosion(int damage);
 
 	// ボスの半径
 	const float& GetRadius() const { return kRadius; }

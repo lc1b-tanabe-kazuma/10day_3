@@ -163,9 +163,11 @@ void Boss::Draw() {
 
 Vector3 Boss::GetPosition() { return worldTranseform_.translation_; }
 
-void Boss::Oncollosion() {
+void Boss::Oncollosion(int damage) {
+
 	// ボスの体力を減らす
-	bossHp_ -= 3;
+	bossHp_ -= damage;
+
 	// 体力が0以下ならデスフラグを立てる
 	if (bossHp_ <= 0) {
 		isDead_ = true;

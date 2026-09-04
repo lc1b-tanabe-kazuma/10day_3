@@ -38,6 +38,7 @@ public:
 	// コンボ取得
 	int GetCombo() const { return combo_; }
 
+	float GetChargeRate() const { return chargeTime_ / kMaxChargeTime; }
 
 	~Player();
 
@@ -71,7 +72,7 @@ private:
 	// 被弾フラグ
 	bool isHit_ = false;
 
-	float angleZ = 7.85f;  // Z軸回転角（ラジアン）
+	float angleZ = 7.85f; // Z軸回転角（ラジアン）
 	float radius = 64.0f; // 原点からの距離
 	const float kRotateSpeed = 0.01f;
 	float verticalSpeed_ = 0.2f;
@@ -93,4 +94,13 @@ private:
 
 	// コンボが続く時間
 	static constexpr float kComboTime = 2.0f;
+
+	enum class ChargeState { None, Charging };
+
+	//
+	ChargeState chargeState_ = ChargeState::None;
+
+	float chargeTime_ = 0.0f;
+
+	static constexpr float kMaxChargeTime = 3.0f;
 };

@@ -27,6 +27,8 @@ public:
 	// 座標のゲッター
 	KamataEngine::Vector2 GetWorldPosition() const { return mousePos_; }
 
+	bool IsAttackHold() const { return input_->IsPressMouse(0); }
+
 	~Aim();
 
 private:

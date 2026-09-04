@@ -1,13 +1,9 @@
 #define NOMINMAX
 #include "Player.h"
 #include "Aim/Aim.h"
-
-#include <algorithm>
 #include "Boss/Boss.h"
-
-
 #include "MyMath.h"
-
+#include <algorithm>
 
 using namespace KamataEngine;
 
@@ -137,31 +133,8 @@ void Player::Draw() {
 
 // 移動処理
 void Player::Move() {
-	//if (input_->PushKey(DIK_W)) {
-	//	worldTransform_.translation_.y += moveSpeed_;
-	//}
-	//
-	//if (input_->PushKey(DIK_S)) {
-	//	worldTransform_.translation_.y -= moveSpeed_;
-	//}
-	//
-	//if (input_->PushKey(DIK_A)) {
-	//	worldTransform_.translation_.x -= moveSpeed_;
-	//}
-	//
-	//if (input_->PushKey(DIK_D)) {
-	//	worldTransform_.translation_.x += moveSpeed_;
-	//}
-	//
-	// 制限を設ける
-	//worldTransform_.translation_.x = std::max(worldTransform_.translation_.x, -kMoveLimitX);
-	//worldTransform_.translation_.x = std::min(worldTransform_.translation_.x, +kMoveLimitX);
-	//worldTransform_.translation_.y = std::max(worldTransform_.translation_.y, -kMoveLimitY);
-	//worldTransform_.translation_.y = std::min(worldTransform_.translation_.y, kMoveLimitY);
-	//worldTransform_.translation_.z = std::max(worldTransform_.translation_.z, -kMoveLimitZ);
-	//worldTransform_.translation_.z = std::min(worldTransform_.translation_.z, +kMoveLimitZ);
 
-		// ===== 上下移動 =====
+	// ===== 上下移動 =====
 	if (input_->PushKey(DIK_W)) {
 		worldTransform_.translation_.y += verticalSpeed_;
 	}
@@ -179,12 +152,13 @@ void Player::Move() {
 		angleZ += kRotateSpeed;
 	}
 	// A/Dの回転範囲を制限
-	angleZ = std::clamp(angleZ, minAngle, maxAngle);
+	// angleZ = std::clamp(angleZ, minAngle, maxAngle);
 
 	// ===== XZ 円運動 =====
 	worldTransform_.translation_.x = std::cos(angleZ) * radius;
 
 	worldTransform_.translation_.z = std::sin(angleZ) * radius;
+
 	// ===== 向き更新 =====
 	Vector3 bossPos = boss_->GetWorldPosition();
 	Vector3 playerPos = worldTransform_.translation_;
@@ -200,33 +174,56 @@ void Player::Move() {
 		worldTransform_.rotation_.y = std::atan2(toBoss.x, toBoss.z) + 3.14159265f / 2.0f;
 	}
 
-
 	// ワールド変換行列の更新
 	WorldTransformUpdate(worldTransform_);
 }
 
 void Player::Attack() {
 
-	// 弾を生成
 	PlayerBullet* newBullet = new PlayerBullet();
 
-	// Aimからマウス方向のRayを取得
 	Ray ray = aim_->GetRayFromMouse();
 
-	// Z=22.5の平面との交点
-	float t = (kAimZ - ray.origin.z) / ray.direction.z;
+	// プレイヤー位置
+	Vector3 playerPos = GetWorldPosition();
 
+	// ボス位置
+	Vector3 bossPos = boss_->GetWorldPosition();
+
+	// プレイヤー → ボス方向
+	Vector3 normal = Normalize(bossPos - playerPos);
+
+	// 照準との交点
+	float kAimDistance = Length(bossPos - playerPos);
+
+	// プレイヤーの前に照準平面を作る
+	Vector3 planePoint = playerPos + normal * kAimDistance;
+
+	// Rayと平面の交点
+	float denominator = Dot(ray.direction, normal);
+
+	if (std::abs(denominator) < 0.0001f) {
+		delete newBullet;
+		return;
+	}
+
+	float t = Dot(planePoint - ray.origin, normal) / denominator;
+
+	if (t < 0.0f) {
+		delete newBullet;
+		return;
+	}
+
+	// 照準位置
 	Vector3 targetPos = ray.origin + ray.direction * t;
 
-	// プレイヤーから交点へ向かう
-	Vector3 bulletDir = Normalize(targetPos - GetWorldPosition());
+	// プレイヤー → 照準位置
+	Vector3 bulletDir = Normalize(targetPos - playerPos);
 
 	Vector3 bulletVelocity = bulletDir * kBulletSpeed;
 
-	// 弾の初期化
-	newBullet->Initialize(bulletModel_, GetWorldPosition(), bulletVelocity);
+	newBullet->Initialize(bulletModel_, playerPos, bulletVelocity);
 
-	// リストへ追加
 	bullets_.push_back(newBullet);
 }
 

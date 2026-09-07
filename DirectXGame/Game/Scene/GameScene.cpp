@@ -112,7 +112,8 @@ void GameScene::Update() {
 	// 数字描画の更新
 	drawNumber_->Update(static_cast<int>(player_->GetCombo()));
 
-	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+	// ゲームクリア判定
+	if (boss_->IsDead()) {
 		SceneManager::GetInstance()->ChangeScene("GameClear");
 	}
 

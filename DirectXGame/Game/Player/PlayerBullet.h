@@ -16,8 +16,14 @@ public:
 	// プレイヤーの弾の位置を取得
 	KamataEngine::Vector3 GetPosition();
 
+	// 座標をセット
+	void SetPosition(const KamataEngine::Vector3& position) { worldTranseform_.translation_ = position; }
+
 	// プレイヤーの弾の半径
 	const float& GetRadius() const { return kRadius; }
+
+	// ワールドトランスフォームのゲッターをconst参照をreturnする関数として作る
+	KamataEngine::WorldTransform& GetWorldTransform() { return worldTranseform_; }
 
 	// スケール設定
 	void setScale(const KamataEngine::Vector3& scale) { worldTranseform_.scale_ = scale; }

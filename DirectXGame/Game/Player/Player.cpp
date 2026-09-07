@@ -40,6 +40,11 @@ Player::~Player() {
 		delete bullet;
 	}
 	bullets_.clear();
+
+	if (chargeBullet_) {
+		delete chargeBullet_;
+		chargeBullet_ = nullptr;
+	}
 }
 
 void Player::Update() {
@@ -52,8 +57,14 @@ void Player::Update() {
 	case ChargeState::None:
 
 		if (aim_->IsAttackHold()) {
+
 			chargeState_ = ChargeState::Charging;
 			chargeTime_ = 0.0f;
+
+			// チャージ弾を生成
+			chargeBullet_ = new PlayerBullet();
+
+			chargeBullet_->Initialize(bulletModel_, GetWorldPosition(), forward_, 1.0f, 0);
 		}
 
 		break;
@@ -69,10 +80,33 @@ void Player::Update() {
 				chargeTime_ = kMaxChargeTime;
 			}
 
+			// チャージ率
+			float chargeRate = GetChargeRate();
+
+			// 弾の大きさ
+			const float kMinBulletScale = 1.0f;
+			const float kMaxBulletScale = 3.0f;
+
+			float bulletScale = kMinBulletScale + (kMaxBulletScale - kMinBulletScale) * chargeRate;
+
+			// プレイヤーの前に表示
+			chargeBullet_->SetPosition(GetWorldPosition() + forward_ * 3.0f);
+			chargeBullet_->setScale({bulletScale, bulletScale, bulletScale});
+
+			// 向きをプレイヤーの向きに合わせる
+			chargeBullet_->GetWorldTransform().rotation_.y = worldTransform_.rotation_.y;
+
+			// ワールド変換行列を更新
+			WorldTransformUpdate(chargeBullet_->GetWorldTransform());
+
 		} else {
 
 			// ボタンを離した瞬間に発射
 			Attack();
+
+			// チャージ弾を削除
+			delete chargeBullet_;
+			chargeBullet_ = nullptr;
 
 			chargeTime_ = 0.0f;
 			chargeState_ = ChargeState::None;
@@ -149,6 +183,11 @@ void Player::Draw() {
 	// 弾の描画
 	for (PlayerBullet* bullet : bullets_) {
 		bullet->Draw(*camera_);
+	}
+
+	// チャージ中の弾
+	if (chargeBullet_) {
+		chargeBullet_->Draw(*camera_);
 	}
 
 	// 無敵時間中
@@ -272,6 +311,9 @@ void Player::Attack() {
 
 	// 弾生成
 	newBullet->Initialize(bulletModel_, playerPos, bulletVelocity, bulletScale, damage);
+
+	// 向きをプレイヤーの向きに合わせる
+	newBullet->GetWorldTransform().rotation_.y = worldTransform_.rotation_.y;
 
 	bullets_.push_back(newBullet);
 }

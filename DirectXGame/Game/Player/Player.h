@@ -103,4 +103,7 @@ private:
 	float chargeTime_ = 0.0f;
 
 	static constexpr float kMaxChargeTime = 3.0f;
+
+	// チャージ中に表示する弾
+	PlayerBullet* chargeBullet_ = nullptr;
 };

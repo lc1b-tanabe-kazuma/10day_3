@@ -141,6 +141,16 @@ void GameScene::Update() {
 		return false;
 	});
 
+	// エフェクトが終了したら削除
+	for (auto it = effects_.begin(); it != effects_.end();) {
+		if ((*it)->IsFinished()) {
+			delete *it;
+			it = effects_.erase(it);
+		} else {
+			++it;
+		}
+	}
+
 	// 照準の更新
 	aim_->Update();
 
@@ -162,6 +172,11 @@ void GameScene::Update() {
 
 	// 当たり判定
 	OnCollision();
+
+	// エフェクトの更新
+	for (Effect* effect : effects_) {
+		effect->Update();
+	}
 
 	// 数字描画の更新
 	drawNumber_->Update(static_cast<int>(player_->GetCombo()));
@@ -206,6 +221,11 @@ void GameScene::OnCollision() {
 				// ---- 通常弾 ----
 				bullet->OnCollision();
 				enemy->OnCollision();
+
+				// 撃破エフェクト生成
+				Effect* effect = new Effect();
+				effect->Initialize(posA);
+				effects_.push_back(effect);
 
 				// ---- コンボ ----
 				player_->OnEnemyHit();
@@ -283,6 +303,10 @@ void GameScene::Draw() {
 	// 敵の描画
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
+	}
+
+	for (Effect* effect : effects_) {
+		effect->Draw(&camera_);
 	}
 
 	// 3Dオブジェクト後処理

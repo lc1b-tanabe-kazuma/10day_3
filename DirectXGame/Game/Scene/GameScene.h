@@ -2,6 +2,7 @@
 #include "Aim/Aim.h"
 #include "Boss/Boss.h"
 #include "DrawNumber.h"
+#include "Effect.h"
 #include "Enemy.h"
 #include "EnemySpawner.h"
 #include "KamataEngine.h"
@@ -86,4 +87,7 @@ private:
 	KamataEngine::Sprite* playerHPBar_ = nullptr;
 	KamataEngine::Sprite* playerHPBackBar_ = nullptr;
 	KamataEngine::Sprite* playerHPLogo_ = nullptr;
+
+	// エフェクト
+	std::list<Effect*> effects_;
 };

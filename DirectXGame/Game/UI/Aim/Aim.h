@@ -27,7 +27,7 @@ public:
 	// 座標のゲッター
 	KamataEngine::Vector2 GetWorldPosition() const { return mousePos_; }
 
-	bool IsAttackHold() const { return input_->IsPressMouse(0); }
+	bool IsAttackHold();
 
 	~Aim();
 
@@ -55,7 +55,4 @@ private:
 	bool isAttac_ = false;
 
 	Ray ray_;
-
-	// クールタイム
-	float coolTime_ = 0.3f;
 };

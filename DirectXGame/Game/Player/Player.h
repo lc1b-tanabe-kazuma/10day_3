@@ -28,6 +28,9 @@ public:
 
 	void OnCollision();
 
+	// プレイヤーの体力を取得
+	int GetHP() const { return playerHP_; }
+
 	void Attack();
 
 	void SetBoss(Boss* boss) { boss_ = boss; }
@@ -93,7 +96,7 @@ private:
 	float comboTimer_ = 0.0f;
 
 	// コンボが続く時間
-	static constexpr float kComboTime = 2.0f;
+	static constexpr float kComboTime = 7.0f;
 
 	enum class ChargeState { None, Charging };
 
@@ -106,4 +109,10 @@ private:
 
 	// チャージ中に表示する弾
 	PlayerBullet* chargeBullet_ = nullptr;
+
+	// プレイヤーの体力
+	int playerHP_ = 10;
+
+	// 攻撃のクールタイム
+	float attackCoolTime_ = 1.0f;
 };

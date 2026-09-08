@@ -38,9 +38,6 @@ public:
 	// 弾リストを取得
 	//const std::list<BossBullet*>& GetBullets() const { return bullets_; }
 
-	// 柱のリストを取得
-	//const std::list<Pillar*>& GetPillars() const { return pillars_; }
-
 	// プレイヤーのセッター
 	void SetPlayer(Player* player) { player_ = player; }
 
@@ -53,19 +50,17 @@ private:
 	// モデル
 	KamataEngine::Model* model_ = nullptr;
 
-	// テクスチャーハンドル
-	uint32_t textureHandle_ = 0u;
 	KamataEngine::Camera* camera_ = nullptr;
 
 	// ボスの出現処理
 	bool isPop_ = false;
 
 	// 半径
-	const float kRadius = 5.0f;
+	const float kRadius = 10.0f;
 
 	// ボスの体力
-	int32_t bossHp_ = 102;
-	int32_t maxBossHp_ = 102;
+	int32_t bossHp_ = 302;
+	int32_t maxBossHp_ = 302;
 
 	// デフラグ
 	bool isDead_ = false;
@@ -92,7 +87,4 @@ private:
 
 	// プレイヤー
 	Player* player_ = nullptr;
-
-	// 柱のモデル
-	//KamataEngine::Model* pillarModel_ = nullptr;
 };

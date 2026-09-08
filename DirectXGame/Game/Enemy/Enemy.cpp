@@ -118,7 +118,7 @@ Enemy::~Enemy() {
 
 // 画面外に出た時にデリートする
 void Enemy::OutFlag() {
-	if (worldTranseform_.translation_.z <= -5.5f || worldTranseform_.translation_.x <= -40.0f || worldTranseform_.translation_.x >= 40.0f) {
+	if (worldTranseform_.translation_.z <= -75.5f || worldTranseform_.translation_.z >= 75.5f || worldTranseform_.translation_.x <= -75.0f || worldTranseform_.translation_.x >= 75.0f) {
 		isOut_ = true;
 	}
 }

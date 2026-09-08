@@ -26,7 +26,7 @@ private:
 
 	float radius_ = 1.0f;
 
-	float deathTimer_ = 3.0f;
+	float deathTimer_ = 6.0f;
 
 	bool isDead_ = false;
 };

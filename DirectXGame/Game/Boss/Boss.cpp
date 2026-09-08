@@ -18,40 +18,15 @@ void Boss::Initialize(Model* model, KamataEngine::Camera* camera) {
 	// bulletモデル
 	//bulletModel_ = bulletModel;
 
-	// 柱のモデル
-	//pillarModel_ = pillarModel;
-
 	// ワールド変換の初期化
 	worldTranseform_.Initialize();
 	worldTranseform_.translation_ = {0.0f, 0.0f, 0.0f};
-	worldTranseform_.scale_ = {2.5f, 2.5f, 2.5f};
-
-	// テクスチャーハンドル
-	// textureHandle_ = textureHandle;
+	worldTranseform_.scale_ = {1.0f, 1.0f, 1.0f};
 
 	// 引数の内容をメンバ変数に記録
 	camera_ = camera;
 
 	input_ = Input::GetInstance();
-
-	//const int kCount = 8;
-
-	//for (int i = 0; i < kCount; i++) {
-	//
-	//	float baseAngle = (2.0f * std::numbers::pi_v<float> / kCount) * i;
-	//
-	//	// 上
-	//	Pillar* upper = new Pillar();
-	//	upper->Initialize(pillarModel_, PillarType::Upper, i, kCount);
-	//	upper->SetAngle(baseAngle);
-	//	pillars_.push_back(upper);
-	//
-	//	// 下
-	//	Pillar* lower = new Pillar();
-	//	lower->Initialize(pillarModel_, PillarType::Lower, i, kCount);
-	//	lower->SetAngle(baseAngle);
-	//	pillars_.push_back(lower);
-	//}
 }
 
 void Boss::Update() {
@@ -62,24 +37,6 @@ void Boss::Update() {
 
 	// 行列を定数バッファに転送
 	WorldTransformUpdate(worldTranseform_);
-
-	// 柱に「中心座標」を渡す
-	//for (Pillar* pillar : pillars_) {
-	//	pillar->SetCenter(worldTranseform_.translation_);
-	//	pillar->Update();
-	//
-	//	// ボスのHPが半分以下になったらスピードアップ
-	//	if (bossHp_ <= maxBossHp_ / 2) {
-	//		pillar->setSpeed(-0.0225f);
-	//	} else {
-	//		speed_ = 0.0225f;
-	//	}
-	//}
-
-	// 弾のクールタイムが0以下なら攻撃可能
-	//if (bulletCoolTime_ > 0) {
-	//	bulletCoolTime_ -= 1.0f / 60.0f;
-	//}
 
 	//Attack();
 
@@ -176,13 +133,6 @@ void Boss::Oncollosion(int damage) {
 
 Boss::~Boss() {
 
-	//for (Pillar* pillar : pillars_) {
-	//	delete pillar;
-	//}
-	//pillars_.clear();
-	//for (BossBullet* bullet : bullets_) {
-	//	delete bullet;
-	//}
 }
 
 Vector3 Boss::GetWorldPosition() const {

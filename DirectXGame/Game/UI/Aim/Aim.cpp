@@ -52,17 +52,9 @@ void Aim::Update() {
 	// スプライトの座標をUI座標に設定
 	sprite_->SetPosition(uiMouse);
 
-	// クールタイムを減らす
-	coolTime_ -= 1.0f / 30.0f;
-
-	// クールタイムが0以下なら打てる
-	if (coolTime_ <= 0.0f) {
-
-		// 左クリックで打つ
-		if (input_->IsPressMouse(0)) {
-			isAttac_ = true;
-			coolTime_ = 0.3f;
-		}
+	// 左クリックで打つ
+	if (input_->IsPressMouse(0)) {
+		isAttac_ = true;
 	}
 
 #ifdef _DEBUG
@@ -136,6 +128,8 @@ Vector3 Aim::GetForward() {
 
 	return forward;
 }
+
+bool Aim::IsAttackHold() { return input_->IsPressMouse(0); }
 
 Aim::~Aim() {
 	if (sprite_) {

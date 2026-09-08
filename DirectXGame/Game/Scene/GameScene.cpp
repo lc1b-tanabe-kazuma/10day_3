@@ -24,6 +24,9 @@ GameScene::~GameScene() {
 	}
 	delete enemySpawner_;
 	delete drawNumber_;
+	delete bossHPBar_;
+	delete bossHPBackBar_;
+	delete bossHPLogo_;
 }
 
 void GameScene::Initialize() {

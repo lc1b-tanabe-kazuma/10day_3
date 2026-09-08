@@ -78,4 +78,12 @@ private:
 	KamataEngine::Sprite* bossHPBar_ = nullptr;
 	KamataEngine::Sprite* bossHPBackBar_ = nullptr;
 	KamataEngine::Sprite* bossHPLogo_ = nullptr;
+
+	// プレイヤーのHPバー
+	uint32_t playerHPBarTH_ = 0;
+	uint32_t playerHPBackBarTH_ = 0;
+	uint32_t playerHPLogoTH_ = 0;
+	KamataEngine::Sprite* playerHPBar_ = nullptr;
+	KamataEngine::Sprite* playerHPBackBar_ = nullptr;
+	KamataEngine::Sprite* playerHPLogo_ = nullptr;
 };

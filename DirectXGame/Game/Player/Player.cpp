@@ -22,7 +22,7 @@ void Player::Initialize(Model* model, Camera* camera, Model* bulletModel, Aim* a
 
 	aim_ = aim;
 
-	playerHP_ = 5;
+	playerHP_ = maxPlayerHP_;
 }
 
 void Player::OnCollision() {

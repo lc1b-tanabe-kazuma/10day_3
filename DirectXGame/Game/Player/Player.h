@@ -43,6 +43,8 @@ public:
 
 	float GetChargeRate() const { return chargeTime_ / kMaxChargeTime; }
 
+	int GetMaxHP() const { return maxPlayerHP_; }
+
 	~Player();
 
 private:
@@ -112,6 +114,7 @@ private:
 
 	// プレイヤーの体力
 	int playerHP_ = 5;
+	int maxPlayerHP_ = 5;
 
 	// 攻撃のクールタイム
 	float attackCoolTime_ = 1.0f;

@@ -32,11 +32,10 @@ public:
 
 	int GetHP() { return bossHp_; }
 
+	int GetMaxHP() { return maxBossHp_; }
+
 	// ワールド座標を取得
 	KamataEngine::Vector3 GetWorldPosition() const;
-
-	// 弾リストを取得
-	//const std::list<BossBullet*>& GetBullets() const { return bullets_; }
 
 	// プレイヤーのセッター
 	void SetPlayer(Player* player) { player_ = player; }

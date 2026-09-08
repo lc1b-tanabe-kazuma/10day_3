@@ -111,7 +111,7 @@ private:
 	PlayerBullet* chargeBullet_ = nullptr;
 
 	// プレイヤーの体力
-	int playerHP_ = 10;
+	int playerHP_ = 5;
 
 	// 攻撃のクールタイム
 	float attackCoolTime_ = 1.0f;

@@ -70,6 +70,27 @@ void GameScene::Initialize() {
 	// 数字描画の初期化
 	drawNumber_ = new DrawNumber();
 	drawNumber_->Initialize(TextureManager::Load("UI/number.png"), Vector2(1000.0f, 32.0f));
+
+	// ボスのHPテクスチャの生成
+	bossHPBarTH_ = TextureManager::Load("UI/UI_bossHP.png");
+	bossHPBar_ = Sprite::Create(bossHPBarTH_, {64.0f, 50.0f}, {1, 1, 1, 1});
+	bossHPBar_->SetAnchorPoint({0.0f, 0.5f});
+	// 横長にする
+	bossHPBar_->SetSize({563.0f, 32.0f});
+	// ボスのHPロゴの生成
+	bossHPLogoTH_ = TextureManager::Load("UI/UI_bossHPLogo.png");
+	bossHPLogo_ = Sprite::Create(bossHPLogoTH_, {32.0f, 82.0f}, {1, 1, 1, 1});
+	bossHPLogo_->SetAnchorPoint({0.0f, 0.5f});
+	// 横長にする
+	bossHPLogo_->SetSize({600.0f, 64.0f});
+
+	// ボスのHPバーの背景の生成
+	bossHPBackBarTH_ = TextureManager::Load("UI/UI_bossHPBarBack.png");
+	bossHPBackBar_ = Sprite::Create(bossHPBackBarTH_, {64.0f, 50.0f}, {1, 1, 1, 1});
+	bossHPBackBar_->SetAnchorPoint({0.0f, 0.5f});
+
+	// 横長にする
+	bossHPBackBar_->SetSize({563.0f, 32.0f});
 }
 
 void GameScene::Update() {
@@ -169,6 +190,15 @@ void GameScene::OnCollision() {
 			// ---- 通常弾 ----
 			bullet->OnCollision();
 			boss_->Oncollosion(bullet->GetDamage());
+
+			// HPバーの更新
+			float hpRate = (float)boss_->GetHP() / boss_->GetMaxHP();
+
+			// 横長にする
+			bossHPBar_->SetSize({563.0f * hpRate, 32.0f});
+
+			// テクスチャの左上から必要な幅だけ使う
+			bossHPBar_->SetTextureRect({0.0f, 0.0f}, {(563.0f * hpRate), 32});
 		}
 	}
 
@@ -224,6 +254,15 @@ void GameScene::Draw() {
 
 	// コンボ描画
 	drawNumber_->Draw();
+
+	// ボスのHPバーの背景の描画
+	bossHPBackBar_->Draw();
+
+	// ボスのHPバーの描画
+	bossHPBar_->Draw();
+
+	// ボスのHPロゴの描画
+	bossHPLogo_->Draw();
 
 	// UI描画後処理
 	Sprite::PostDraw();

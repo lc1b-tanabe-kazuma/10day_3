@@ -70,4 +70,12 @@ private:
 	// 数字描画
 	DrawNumber* drawNumber_;
 	uint32_t numberTH_ = 0;
+
+	// ボスのHPバー
+	uint32_t bossHPBarTH_ = 0;
+	uint32_t bossHPBackBarTH_ = 0;
+	uint32_t bossHPLogoTH_ = 0;
+	KamataEngine::Sprite* bossHPBar_ = nullptr;
+	KamataEngine::Sprite* bossHPBackBar_ = nullptr;
+	KamataEngine::Sprite* bossHPLogo_ = nullptr;
 };

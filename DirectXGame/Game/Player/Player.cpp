@@ -22,7 +22,7 @@ void Player::Initialize(Model* model, Camera* camera, Model* bulletModel, Aim* a
 
 	aim_ = aim;
 
-	playerHP_ = 10;
+	playerHP_ = 5;
 }
 
 void Player::OnCollision() {

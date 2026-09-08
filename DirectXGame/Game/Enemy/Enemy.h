@@ -56,7 +56,7 @@ private:
 	bool isOut_ = false;
 
 	// 半径
-	const float kRadius = 2.5f;
+	const float kRadius = 5.0f;
 
 	KamataEngine::Vector3 moveVec_ = {0, 0, 0};
 
@@ -66,7 +66,7 @@ private:
 	KamataEngine::Model* bulletModel_ = nullptr;
 
 	// 弾の速度
-	const float bulletSpeed_ = 0.5f;
+	const float bulletSpeed_ = 1.5f;
 
 	float attackTimer_ = 2.0f;
 

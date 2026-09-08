@@ -21,6 +21,8 @@ void Player::Initialize(Model* model, Camera* camera, Model* bulletModel, Aim* a
 	input_ = Input::GetInstance();
 
 	aim_ = aim;
+
+	playerHP_ = 10;
 }
 
 void Player::OnCollision() {
@@ -29,6 +31,9 @@ void Player::OnCollision() {
 	if (isHit_) {
 		return;
 	}
+
+	// プレイヤーの体力を減らす
+	playerHP_--;
 
 	// 被弾フラグを立てる
 	isHit_ = true;
@@ -52,10 +57,18 @@ void Player::Update() {
 	// 移動処理
 	Move();
 
+	attackCoolTime_ -= 1.0f / 30.0f;
+
 	switch (chargeState_) {
 
 	case ChargeState::None:
 
+		// クールタイムが残っている場合は攻撃できない
+		if (attackCoolTime_ > 0.0f) {
+			break;
+		}
+
+		// 攻撃ボタンが押されているか
 		if (aim_->IsAttackHold()) {
 
 			chargeState_ = ChargeState::Charging;
@@ -108,6 +121,10 @@ void Player::Update() {
 			delete chargeBullet_;
 			chargeBullet_ = nullptr;
 
+			// 攻撃のクールタイムをリセット
+			attackCoolTime_ = 1.0f;
+
+			// チャージ時間をリセット
 			chargeTime_ = 0.0f;
 			chargeState_ = ChargeState::None;
 		}
@@ -223,8 +240,6 @@ void Player::Move() {
 	} else if (input_->PushKey(DIK_D)) {
 		angleZ += kRotateSpeed;
 	}
-	// A/Dの回転範囲を制限
-	// angleZ = std::clamp(angleZ, minAngle, maxAngle);
 
 	// ===== XZ 円運動 =====
 	worldTransform_.translation_.x = std::cos(angleZ) * radius;
@@ -307,7 +322,7 @@ void Player::Attack() {
 	const int kMinDamage = 3;
 	const int kMaxDamage = 20;
 
-	int damage = static_cast<int>(kMinDamage + (kMaxDamage - kMinDamage) * GetChargeRate());
+	int damage = static_cast<int>(kMinDamage + combo_ + (kMaxDamage - kMinDamage) * GetChargeRate());
 
 	// 弾生成
 	newBullet->Initialize(bulletModel_, playerPos, bulletVelocity, bulletScale, damage);

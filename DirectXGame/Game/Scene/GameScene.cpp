@@ -117,6 +117,11 @@ void GameScene::Update() {
 		SceneManager::GetInstance()->ChangeScene("GameClear");
 	}
 
+	// ゲームオーバー判定
+	if (player_->GetHP() <= 0) {
+		SceneManager::GetInstance()->ChangeScene("Game");
+	}
+
 	// カメラ処理
 	// レールカメラコントローラーの更新
 	railCameraController_->Update();

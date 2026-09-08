@@ -66,7 +66,7 @@ private:
 	KamataEngine::Model* bulletModel_ = nullptr;
 
 	// 弾の速度
-	const float bulletSpeed_ = 2.5f;
+	const float bulletSpeed_ = 2.0f;
 
 	float attackTimer_ = 2.0f;
 

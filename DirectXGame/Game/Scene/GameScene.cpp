@@ -27,6 +27,9 @@ GameScene::~GameScene() {
 	delete bossHPBar_;
 	delete bossHPBackBar_;
 	delete bossHPLogo_;
+	delete playerHPBar_;
+	delete playerHPBackBar_;
+	delete playerHPLogo_;
 }
 
 void GameScene::Initialize() {
@@ -78,12 +81,15 @@ void GameScene::Initialize() {
 	bossHPBarTH_ = TextureManager::Load("UI/UI_bossHP.png");
 	bossHPBar_ = Sprite::Create(bossHPBarTH_, {64.0f, 50.0f}, {1, 1, 1, 1});
 	bossHPBar_->SetAnchorPoint({0.0f, 0.5f});
+
 	// 横長にする
 	bossHPBar_->SetSize({563.0f, 32.0f});
+
 	// ボスのHPロゴの生成
 	bossHPLogoTH_ = TextureManager::Load("UI/UI_bossHPLogo.png");
 	bossHPLogo_ = Sprite::Create(bossHPLogoTH_, {32.0f, 82.0f}, {1, 1, 1, 1});
 	bossHPLogo_->SetAnchorPoint({0.0f, 0.5f});
+
 	// 横長にする
 	bossHPLogo_->SetSize({600.0f, 64.0f});
 
@@ -94,6 +100,30 @@ void GameScene::Initialize() {
 
 	// 横長にする
 	bossHPBackBar_->SetSize({563.0f, 32.0f});
+
+	// プレイヤーのHPバーの生成
+	playerHPBarTH_ = TextureManager::Load("UI/UI_playerHP.png");
+	playerHPBar_ = Sprite::Create(playerHPBarTH_, {64.0f, 700.0f}, {1, 1, 1, 1});
+	playerHPBar_->SetAnchorPoint({0.0f, 0.5f});
+
+	// 横長にする
+	playerHPBar_->SetSize({563.0f, 32.0f});
+
+	// プレイヤーのHPバーの背景の生成
+	playerHPBackBarTH_ = TextureManager::Load("UI/UI_playerHPBarBack.png");
+	playerHPBackBar_ = Sprite::Create(playerHPBackBarTH_, {64.0f, 700.0f}, {1, 1, 1, 1});
+	playerHPBackBar_->SetAnchorPoint({0.0f, 0.5f});
+
+	// 横長にする
+	playerHPBackBar_->SetSize({563.0f, 32.0f});
+
+	// プレイヤーのHPロゴの生成
+	playerHPLogoTH_ = TextureManager::Load("UI/UI_playerHPLogo.png");
+	playerHPLogo_ = Sprite::Create(playerHPLogoTH_, {32.0f, 695.0f}, {1, 1, 1, 1});
+	playerHPLogo_->SetAnchorPoint({0.0f, 0.5f});
+
+	// 横長にする
+	playerHPLogo_->SetSize({600.0f, 64.0f});
 }
 
 void GameScene::Update() {
@@ -217,6 +247,15 @@ void GameScene::OnCollision() {
 				// ---- 敵の弾 ----
 				enemyBullet->OnCollision();
 				player_->OnCollision();
+
+				// ---- プレイヤーのHPバーの更新 ----
+				float hpRate = (float)player_->GetHP() / player_->GetMaxHP();
+
+				// 横長にする
+				playerHPBar_->SetSize({563.0f * hpRate, 32.0f});
+
+				// テクスチャの左上から必要な幅だけ使う
+				playerHPBar_->SetTextureRect({0.0f, 0.0f}, {(563.0f * hpRate), 32});
 			}
 		}
 	}
@@ -266,6 +305,15 @@ void GameScene::Draw() {
 
 	// ボスのHPロゴの描画
 	bossHPLogo_->Draw();
+
+	// プレイヤーのHPバーの背景の描画
+	playerHPBackBar_->Draw();
+
+	// プレイヤーのHPバーの描画
+	playerHPBar_->Draw();
+
+	// プレイヤーのHPロゴの描画
+	playerHPLogo_->Draw();
 
 	// UI描画後処理
 	Sprite::PostDraw();

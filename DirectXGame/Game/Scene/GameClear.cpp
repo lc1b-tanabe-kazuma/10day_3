@@ -23,6 +23,11 @@ void GameClear::Initialize() {
 	);
 	startButtonSprite_->SetSize(startButtonSize);
 	startButtonSprite_->SetAnchorPoint({0.5f, 0.5f});
+
+	// ゲームプレイ用BGMの読み込みと再生
+	soundDataHandle_ = Audio::GetInstance()->LoadWave("sound/BGM/clear.wav");
+	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.2f);
+
 }
 
 void GameClear::Update() {
@@ -81,6 +86,9 @@ void GameClear::Draw() {
 }
 
 GameClear::~GameClear() {
+	// BGM停止
+	Audio::GetInstance()->StopWave(voiceHandle_);
+
 	delete aim_;
 	delete startButtonSprite_;
 }

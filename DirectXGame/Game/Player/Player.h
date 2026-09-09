@@ -118,4 +118,12 @@ private:
 
 	// 攻撃のクールタイム
 	float attackCoolTime_ = 1.0f;
+
+	// 射撃音のハンドル
+	uint32_t shotSoundHandle_ = 0;
+
+	// チャージ音用
+	uint32_t chargeSoundHandle_ = 0;      // 音源データ
+	uint32_t chargeVoiceHandle_ = 0;      // 再生中ボイスの制御用
+	bool isChargingSoundPlaying_ = false; // 再生中フラグ
 };

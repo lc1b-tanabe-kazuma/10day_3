@@ -99,5 +99,4 @@ private:
 	uint32_t hitSoundHandle_ = 0;
 	// プレイヤー被弾音のハンドル
 	uint32_t damageSoundHandle_ = 0;
-
 };

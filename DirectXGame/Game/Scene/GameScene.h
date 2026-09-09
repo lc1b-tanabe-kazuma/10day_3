@@ -105,4 +105,14 @@ private:
 	// 地面
 	Ground* ground_ = nullptr;
 	Model* modelGround_ = nullptr;
+
+	// BGM関連
+	uint32_t soundDataHandle_ = 0;
+	uint32_t voiceHandle_ = 0;
+
+	// ヒット音のハンドル
+	uint32_t hitSoundHandle_ = 0;
+	// プレイヤー被弾音のハンドル
+	uint32_t damageSoundHandle_ = 0;
+
 };

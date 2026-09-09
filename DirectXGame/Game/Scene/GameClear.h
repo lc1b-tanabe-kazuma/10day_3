@@ -45,4 +45,9 @@ private:
 	uint32_t backgroundSpriteTH_ = 0;
 	KamataEngine::Sprite* backgroundSprite_ = nullptr;
 
+	// BGM関連
+	uint32_t soundDataHandle_ = 0;
+	uint32_t voiceHandle_ = 0;
+
+
 };

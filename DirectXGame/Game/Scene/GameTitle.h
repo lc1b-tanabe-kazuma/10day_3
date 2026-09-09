@@ -55,4 +55,11 @@ private:
 	uint32_t titleLogoSpriteTH_ = 0;
 	KamataEngine::Sprite* titleLogoSprite_ = nullptr;
 
+	// BGM関連
+	uint32_t soundDataHandle_ = 0;
+	uint32_t voiceHandle_ = 0;
+
+	// SE（効果音）用ハンドル
+	uint32_t clickSoundHandle_ = 0;
+
 };

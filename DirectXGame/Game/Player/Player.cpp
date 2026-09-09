@@ -23,6 +23,12 @@ void Player::Initialize(Model* model, Camera* camera, Model* bulletModel, Aim* a
 	aim_ = aim;
 
 	playerHP_ = maxPlayerHP_;
+
+	// 射撃音のロード
+	shotSoundHandle_ = KamataEngine::Audio::GetInstance()->LoadWave("sound/SE/shot.wav");
+
+	// チャージ音の読み込み
+	chargeSoundHandle_ = KamataEngine::Audio::GetInstance()->LoadWave("sound/SE/charge.wav");
 }
 
 void Player::OnCollision() {
@@ -49,6 +55,10 @@ Player::~Player() {
 	if (chargeBullet_) {
 		delete chargeBullet_;
 		chargeBullet_ = nullptr;
+	}
+
+	if (isChargingSoundPlaying_) {
+		KamataEngine::Audio::GetInstance()->StopWave(chargeVoiceHandle_);
 	}
 }
 
@@ -78,6 +88,13 @@ void Player::Update() {
 			chargeBullet_ = new PlayerBullet();
 
 			chargeBullet_->Initialize(bulletModel_, GetWorldPosition(), forward_, 1.0f, 0);
+
+			// 音がまだ鳴っていなければループ再生を開始
+			if (!isChargingSoundPlaying_) {
+				// 第2引数を true にしてループ再生
+				chargeVoiceHandle_ = KamataEngine::Audio::GetInstance()->PlayWave(chargeSoundHandle_, true, 0.5f);
+				isChargingSoundPlaying_ = true;
+			}
 		}
 
 		break;
@@ -116,6 +133,15 @@ void Player::Update() {
 
 			// ボタンを離した瞬間に発射
 			Attack();
+
+			// 射撃音を再生（単発再生: false）
+			KamataEngine::Audio::GetInstance()->PlayWave(shotSoundHandle_, false, 0.4f);
+
+			// 発射時にチャージ音を停止
+			if (isChargingSoundPlaying_) {
+				KamataEngine::Audio::GetInstance()->StopWave(chargeVoiceHandle_);
+				isChargingSoundPlaying_ = false;
+			}
 
 			// チャージ弾を削除
 			delete chargeBullet_;

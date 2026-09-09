@@ -30,6 +30,11 @@ void GameClear::Initialize() {
 	    backgroundSpriteTH_, {0.0f, 0.0f}, // 初期位置
 	    Vector4(1.0f, 1.0f, 1.0f, 1.0f)    // 色
 	);
+
+	// ゲームプレイ用BGMの読み込みと再生
+	soundDataHandle_ = Audio::GetInstance()->LoadWave("sound/BGM/clear.wav");
+	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.05f);
+
 }
 
 void GameClear::Update() {
@@ -51,6 +56,11 @@ void GameClear::Update() {
 
 		// 左クリック
 		if (input_->IsTriggerMouse(0)) {
+
+			// 音を止める
+			if (Audio::GetInstance()->IsPlaying(voiceHandle_)) {
+				Audio::GetInstance()->StopWave(voiceHandle_);
+			}
 
 			//
 			SceneManager::GetInstance()->ChangeScene("Title");
@@ -91,6 +101,9 @@ void GameClear::Draw() {
 }
 
 GameClear::~GameClear() {
+	// BGM停止
+	Audio::GetInstance()->StopWave(voiceHandle_);
+
 	delete aim_;
 	delete startButtonSprite_;
 	delete backgroundSprite_;

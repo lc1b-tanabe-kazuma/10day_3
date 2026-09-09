@@ -139,6 +139,7 @@ void GameScene::Initialize() {
 
 }
 
+
 void GameScene::Update() {
 
 	// 敵が消えたら削除

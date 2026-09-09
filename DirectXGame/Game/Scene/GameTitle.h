@@ -46,4 +46,13 @@ private:
 	KamataEngine::Vector2 startButtonSize = {256.0f, 128.0f};
 	KamataEngine::Vector2 startButtonPos = {windowWidth / 2.0f, windowHeight / 1.25f};
 	uint32_t startButtonSpriteTH_ = 0;
+
+	// 背景
+	uint32_t backgroundSpriteTH_ = 0;
+	KamataEngine::Sprite* backgroundSprite_ = nullptr;
+
+	// タイトルロゴ
+	uint32_t titleLogoSpriteTH_ = 0;
+	KamataEngine::Sprite* titleLogoSprite_ = nullptr;
+
 };

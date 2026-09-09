@@ -52,7 +52,7 @@ void GameScene::Initialize() {
 
 	// 敵モデル
 	modelEnemy_ = Model::CreateFromOBJ("enemy", true);
-	modelBullet_ = Model::CreateFromOBJ("playerBullet", true);
+	modelBullet_ = Model::CreateFromOBJ("bullet", true);
 
 	// ボスの初期化
 	boss_ = new Boss();
@@ -75,7 +75,11 @@ void GameScene::Initialize() {
 
 	// 数字描画の初期化
 	drawNumber_ = new DrawNumber();
-	drawNumber_->Initialize(TextureManager::Load("UI/number.png"), Vector2(1000.0f, 32.0f));
+	drawNumber_->Initialize(TextureManager::Load("UI/number.png"), Vector2(968.0f, 32.0f));
+
+	// コンボの文字描画の初期化
+	comboTH_ = TextureManager::Load("UI/combo.png");
+	comboSprite_ = Sprite::Create(comboTH_, {1128.0f, 32.0f}, {1, 1, 1, 1});
 
 	// ボスのHPテクスチャの生成
 	bossHPBarTH_ = TextureManager::Load("UI/UI_bossHP.png");
@@ -124,6 +128,16 @@ void GameScene::Initialize() {
 
 	// 横長にする
 	playerHPLogo_->SetSize({600.0f, 64.0f});
+
+	// スカイドームの初期化
+	modelSkydome_ = Model::CreateFromOBJ("SkyDome", true);
+	skydome_ = new Skydome();
+	skydome_->Initialize(modelSkydome_, &camera_);
+
+	// 地面の初期化
+	modelGround_ = Model::CreateFromOBJ("Ground", true);
+	ground_ = new Ground();
+	ground_->Initialize(modelGround_, &camera_);
 }
 
 void GameScene::Update() {
@@ -199,6 +213,12 @@ void GameScene::Update() {
 	camera_.matProjection = railCameraController_->GetCamera().matProjection;
 	// ビュープロジェクション行列の更新と転送
 	camera_.TransferMatrix();
+
+	// スカイドームの更新
+	skydome_->Update();
+
+	// 地面の更新
+	ground_->Update();
 }
 
 void GameScene::OnCollision() {
@@ -309,6 +329,12 @@ void GameScene::Draw() {
 		effect->Draw(&camera_);
 	}
 
+	// スカイドームの描画
+	skydome_->Draw();
+
+	// 地面の描画
+	ground_->Draw();
+
 	// 3Dオブジェクト後処理
 	Model::PostDraw();
 
@@ -320,6 +346,9 @@ void GameScene::Draw() {
 
 	// コンボ描画
 	drawNumber_->Draw();
+
+	// コンボの文字描画
+	comboSprite_->Draw();
 
 	// ボスのHPバーの背景の描画
 	bossHPBackBar_->Draw();

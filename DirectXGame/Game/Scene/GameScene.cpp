@@ -11,6 +11,9 @@ using namespace std;
 using namespace KamataEngine;
 
 GameScene::~GameScene() {
+	// BGM停止
+	Audio::GetInstance()->StopWave(voiceHandle_);
+
 	delete playerModel_;
 	delete playerBulletModel_;
 	delete player_;
@@ -124,6 +127,16 @@ void GameScene::Initialize() {
 
 	// 横長にする
 	playerHPLogo_->SetSize({600.0f, 64.0f});
+
+	soundDataHandle_ = Audio::GetInstance()->LoadWave("sound/BGM/game.wav");
+	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.2f);
+
+	// ヒット音のロード
+	hitSoundHandle_ = Audio::GetInstance()->LoadWave("sound/SE/HitShot.wav");
+
+	// プレイヤー被弾音のロード
+	damageSoundHandle_ = Audio::GetInstance()->LoadWave("sound/SE/hidan.wav");
+
 }
 
 void GameScene::Update() {
@@ -229,6 +242,10 @@ void GameScene::OnCollision() {
 
 				// ---- コンボ ----
 				player_->OnEnemyHit();
+
+				// ---- ヒット音の再生 ----
+				Audio::GetInstance()->PlayWave(hitSoundHandle_, false, 1.0f);
+
 			}
 		}
 	}
@@ -243,6 +260,9 @@ void GameScene::OnCollision() {
 			// ---- 通常弾 ----
 			bullet->OnCollision();
 			boss_->Oncollosion(bullet->GetDamage());
+
+			// ---- ボスヒット音 ----
+			Audio::GetInstance()->PlayWave(hitSoundHandle_, false, 1.0f);
 
 			// HPバーの更新
 			float hpRate = (float)boss_->GetHP() / boss_->GetMaxHP();
@@ -267,6 +287,9 @@ void GameScene::OnCollision() {
 				// ---- 敵の弾 ----
 				enemyBullet->OnCollision();
 				player_->OnCollision();
+
+				// ---- プレイヤー被弾音の再生 ----
+				Audio::GetInstance()->PlayWave(damageSoundHandle_, false, 1.0f);
 
 				// ---- プレイヤーのHPバーの更新 ----
 				float hpRate = (float)player_->GetHP() / player_->GetMaxHP();

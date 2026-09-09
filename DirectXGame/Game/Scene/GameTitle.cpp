@@ -20,6 +20,15 @@ void GameTitle::Initialize() {
 	);
 	startButtonSprite_->SetSize(startButtonSize);
 	startButtonSprite_->SetAnchorPoint({0.5f, 0.5f});
+
+	// BGMの読み込み
+	soundDataHandle_ = Audio::GetInstance()->LoadWave("sound/BGM/title.wav");
+	// BGM再生
+	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.2f);
+
+	// 決定音の読み込み
+	clickSoundHandle_ = Audio::GetInstance()->LoadWave("sound/SE/kettei.wav");
+
 }
 
 void GameTitle::Update() {
@@ -41,6 +50,12 @@ void GameTitle::Update() {
 
 		// 左クリック
 		if (input_->IsTriggerMouse(0)) {
+
+			// 決定音を単発再生（第2引数を false にする）
+			Audio::GetInstance()->PlayWave(clickSoundHandle_, false, 0.7f);
+
+			// シーン遷移前にタイトルBGMを停止
+			Audio::GetInstance()->StopWave(voiceHandle_);
 
 			//
 			SceneManager::GetInstance()->ChangeScene("Game");
@@ -80,6 +95,10 @@ void GameTitle::Draw() {
 }
 
 GameTitle::~GameTitle() {
+
+	// シーン遷移前にタイトルBGMを停止
+	Audio::GetInstance()->StopWave(voiceHandle_);
+
 	delete aim_;
 	delete startButtonSprite_;
 }

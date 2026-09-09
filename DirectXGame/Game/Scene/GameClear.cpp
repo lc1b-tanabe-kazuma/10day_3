@@ -16,7 +16,7 @@ void GameClear::Initialize() {
 	aim_->Initialize(&camera_);
 
 	// 進むボタンの初期化
-	startButtonSpriteTH_ = TextureManager::Load("uvChecker.png");
+	startButtonSpriteTH_ = TextureManager::Load("gameClear/goTitle.png");
 	startButtonSprite_ = Sprite::Create(
 	    startButtonSpriteTH_, startButtonPos, // 初期位置
 	    Vector4(1.0f, 1.0f, 1.0f, 1.0f)       // 色
@@ -24,9 +24,17 @@ void GameClear::Initialize() {
 	startButtonSprite_->SetSize(startButtonSize);
 	startButtonSprite_->SetAnchorPoint({0.5f, 0.5f});
 
+	// 背景の初期化
+	backgroundSpriteTH_ = TextureManager::Load("gameClear/gameClear.png");
+	backgroundSprite_ = Sprite::Create(
+	    backgroundSpriteTH_, {0.0f, 0.0f}, // 初期位置
+	    Vector4(1.0f, 1.0f, 1.0f, 1.0f)    // 色
+	);
+
 	// ゲームプレイ用BGMの読み込みと再生
 	soundDataHandle_ = Audio::GetInstance()->LoadWave("sound/BGM/clear.wav");
 	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.05f);
+
 }
 
 void GameClear::Update() {
@@ -79,6 +87,9 @@ void GameClear::Draw() {
 	// UI描画前処理
 	Sprite::PreDraw(commandList);
 
+	// 背景の描画
+	backgroundSprite_->Draw();
+
 	// スタートボタンの描画
 	startButtonSprite_->Draw();
 
@@ -95,4 +106,5 @@ GameClear::~GameClear() {
 
 	delete aim_;
 	delete startButtonSprite_;
+	delete backgroundSprite_;
 }

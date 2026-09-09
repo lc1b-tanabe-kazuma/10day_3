@@ -41,8 +41,13 @@ private:
 	KamataEngine::Vector2 startButtonPos = {windowWidth / 2.0f, windowHeight / 1.25f};
 	uint32_t startButtonSpriteTH_ = 0;
 
+	// 背景
+	uint32_t backgroundSpriteTH_ = 0;
+	KamataEngine::Sprite* backgroundSprite_ = nullptr;
+
 	// BGM関連
 	uint32_t soundDataHandle_ = 0;
 	uint32_t voiceHandle_ = 0;
+
 
 };

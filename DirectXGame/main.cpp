@@ -8,7 +8,7 @@ using namespace KamataEngine;
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// エンジンの初期化
-	KamataEngine::Initialize(L"");
+	KamataEngine::Initialize(L"30066_海祭り");
 
 	// DirectXCommonのインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();

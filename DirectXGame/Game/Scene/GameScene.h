@@ -9,6 +9,9 @@
 #include "Player.h"
 #include "RailCamera/RailCameraController.h"
 #include "SceneBase.h"
+#include "Object/SkyDome/SkyDome.h"
+#include "Object/Ground/Ground.h"
+
 
 using namespace KamataEngine;
 
@@ -72,6 +75,10 @@ private:
 	DrawNumber* drawNumber_;
 	uint32_t numberTH_ = 0;
 
+	// コンボの文字描画
+	uint32_t comboTH_ = 0;
+	KamataEngine::Sprite* comboSprite_ = nullptr;
+
 	// ボスのHPバー
 	uint32_t bossHPBarTH_ = 0;
 	uint32_t bossHPBackBarTH_ = 0;
@@ -91,6 +98,14 @@ private:
 	// エフェクト
 	std::list<Effect*> effects_;
 
+	// スカイドーム
+	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+
+	// 地面
+	Ground* ground_ = nullptr;
+	Model* modelGround_ = nullptr;
+
 	// BGM関連
 	uint32_t soundDataHandle_ = 0;
 	uint32_t voiceHandle_ = 0;
@@ -99,4 +114,5 @@ private:
 	uint32_t hitSoundHandle_ = 0;
 	// プレイヤー被弾音のハンドル
 	uint32_t damageSoundHandle_ = 0;
+
 };

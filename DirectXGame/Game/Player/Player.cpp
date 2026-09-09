@@ -109,6 +109,7 @@ void Player::Update() {
 
 			if (chargeTime_ > kMaxChargeTime) {
 				chargeTime_ = kMaxChargeTime;
+				StopChargingSound();
 			}
 
 			// チャージ率

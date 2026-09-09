@@ -212,6 +212,9 @@ void GameScene::Update() {
 		// 音を止める
 		if (Audio::GetInstance()->IsPlaying(voiceHandle_)) {
 			Audio::GetInstance()->StopWave(voiceHandle_);
+
+			// チャージ音を停止
+			player_->StopChargingSound();
 		}
 
 		SceneManager::GetInstance()->ChangeScene("GameClear");
@@ -222,6 +225,8 @@ void GameScene::Update() {
 		// 音を止める
 		if (Audio::GetInstance()->IsPlaying(voiceHandle_)) {
 			Audio::GetInstance()->StopWave(voiceHandle_);
+			// チャージ音を停止
+			player_->StopChargingSound();
 		}
 
 		SceneManager::GetInstance()->ChangeScene("Game");

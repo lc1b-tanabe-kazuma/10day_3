@@ -45,6 +45,17 @@ public:
 
 	int GetMaxHP() const { return maxPlayerHP_; }
 
+	// チャージ音が再生中かどうかを取得
+	bool IsChargingSoundPlaying() const { return isChargingSoundPlaying_; }
+
+	// チャージ音の再生を止める
+	void StopChargingSound() {
+		if (isChargingSoundPlaying_) {
+			KamataEngine::Audio::GetInstance()->StopWave(chargeVoiceHandle_);
+			isChargingSoundPlaying_ = false;
+		}
+	}
+
 	~Player();
 
 private:

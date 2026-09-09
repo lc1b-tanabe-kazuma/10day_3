@@ -26,8 +26,7 @@ void GameClear::Initialize() {
 
 	// ゲームプレイ用BGMの読み込みと再生
 	soundDataHandle_ = Audio::GetInstance()->LoadWave("sound/BGM/clear.wav");
-	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.2f);
-
+	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.05f);
 }
 
 void GameClear::Update() {
@@ -49,6 +48,11 @@ void GameClear::Update() {
 
 		// 左クリック
 		if (input_->IsTriggerMouse(0)) {
+
+			// 音を止める
+			if (Audio::GetInstance()->IsPlaying(voiceHandle_)) {
+				Audio::GetInstance()->StopWave(voiceHandle_);
+			}
 
 			//
 			SceneManager::GetInstance()->ChangeScene("Title");

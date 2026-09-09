@@ -129,16 +129,14 @@ void GameScene::Initialize() {
 	playerHPLogo_->SetSize({600.0f, 64.0f});
 
 	soundDataHandle_ = Audio::GetInstance()->LoadWave("sound/BGM/game.wav");
-	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.2f);
+	voiceHandle_ = Audio::GetInstance()->PlayWave(soundDataHandle_, true, 0.05f);
 
 	// ヒット音のロード
 	hitSoundHandle_ = Audio::GetInstance()->LoadWave("sound/SE/HitShot.wav");
 
 	// プレイヤー被弾音のロード
 	damageSoundHandle_ = Audio::GetInstance()->LoadWave("sound/SE/hidan.wav");
-
 }
-
 
 void GameScene::Update() {
 
@@ -197,11 +195,21 @@ void GameScene::Update() {
 
 	// ゲームクリア判定
 	if (boss_->IsDead()) {
+		// 音を止める
+		if (Audio::GetInstance()->IsPlaying(voiceHandle_)) {
+			Audio::GetInstance()->StopWave(voiceHandle_);
+		}
+
 		SceneManager::GetInstance()->ChangeScene("GameClear");
 	}
 
 	// ゲームオーバー判定
 	if (player_->GetHP() <= 0) {
+		// 音を止める
+		if (Audio::GetInstance()->IsPlaying(voiceHandle_)) {
+			Audio::GetInstance()->StopWave(voiceHandle_);
+		}
+
 		SceneManager::GetInstance()->ChangeScene("Game");
 	}
 
@@ -246,7 +254,6 @@ void GameScene::OnCollision() {
 
 				// ---- ヒット音の再生 ----
 				Audio::GetInstance()->PlayWave(hitSoundHandle_, false, 1.0f);
-
 			}
 		}
 	}
@@ -290,7 +297,7 @@ void GameScene::OnCollision() {
 				player_->OnCollision();
 
 				// ---- プレイヤー被弾音の再生 ----
-				Audio::GetInstance()->PlayWave(damageSoundHandle_, false, 1.0f);
+				Audio::GetInstance()->PlayWave(damageSoundHandle_, false, 0.5f);
 
 				// ---- プレイヤーのHPバーの更新 ----
 				float hpRate = (float)player_->GetHP() / player_->GetMaxHP();

@@ -53,7 +53,7 @@ void GameTitle::Initialize() {
 	);
 
 	// サイズを少し小さくする
-	tutorialImageSprite_->SetSize({1280.0f, 520.0f});
+	tutorialImageSprite_->SetSize({1280.0f, 620.0f});
 
 	// チュートリアル用の黒い背景の初期化
 	tutorialBackgroundSpriteTH_ = TextureManager::Load("white1x1.png");

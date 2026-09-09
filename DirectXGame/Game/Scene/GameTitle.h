@@ -1,7 +1,7 @@
 #pragma once
+#include "Aim/Aim.h"
 #include "KamataEngine.h"
 #include "SceneBase.h"
-#include "Aim/Aim.h"
 
 using namespace KamataEngine;
 
@@ -47,6 +47,23 @@ private:
 	KamataEngine::Vector2 startButtonPos = {windowWidth / 2.0f, windowHeight / 1.25f};
 	uint32_t startButtonSpriteTH_ = 0;
 
+	// チュートリアルボタン
+	KamataEngine::Sprite* tutorialButtonSprite_ = nullptr;
+	KamataEngine::Vector2 tutorialButtonSize = {256.0f, 128.0f};
+	KamataEngine::Vector2 tutorialButtonPos = {windowWidth / 1.25f, windowHeight / 1.25f};
+	uint32_t tutorialButtonSpriteTH_ = 0;
+
+	// チュートリアル画像
+	KamataEngine::Sprite* tutorialImageSprite_ = nullptr;
+	uint32_t tutorialImageSpriteTH_ = 0;
+
+	// チュートリアル用の黒い背景
+	KamataEngine::Sprite* tutorialBackgroundSprite_ = nullptr;
+	uint32_t tutorialBackgroundSpriteTH_ = 0;
+
+	enum class ButtonState { None, Tutorial };
+	ButtonState buttonState_ = ButtonState::None;
+
 	// 背景
 	uint32_t backgroundSpriteTH_ = 0;
 	KamataEngine::Sprite* backgroundSprite_ = nullptr;
@@ -61,5 +78,4 @@ private:
 
 	// SE（効果音）用ハンドル
 	uint32_t clickSoundHandle_ = 0;
-
 };

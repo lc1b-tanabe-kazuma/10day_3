@@ -57,8 +57,9 @@ Player::~Player() {
 		chargeBullet_ = nullptr;
 	}
 
+	// チャージ音を停止
 	if (isChargingSoundPlaying_) {
-		KamataEngine::Audio::GetInstance()->StopWave(chargeVoiceHandle_);
+		StopChargingSound();
 	}
 }
 
@@ -139,8 +140,7 @@ void Player::Update() {
 
 			// 発射時にチャージ音を停止
 			if (isChargingSoundPlaying_) {
-				KamataEngine::Audio::GetInstance()->StopWave(chargeVoiceHandle_);
-				isChargingSoundPlaying_ = false;
+				StopChargingSound();
 			}
 
 			// チャージ弾を削除
@@ -154,7 +154,6 @@ void Player::Update() {
 			chargeTime_ = 0.0f;
 			chargeState_ = ChargeState::None;
 		}
-
 		break;
 	}
 
